@@ -202,6 +202,8 @@ namespace Oxide.Plugins
             public string[] HideCategories = { };
 
             public double DefaultSkinPrice = 1000;
+			
+			public int DefaultSkinsCountPerItem = 90;
 
             public double[] VipDiscounts = {10d, 20d};
 
@@ -1458,7 +1460,14 @@ namespace Oxide.Plugins
                 var total = Convert.ToInt32(totalReg.Groups[1].Value.Replace(",",""));
                 if (total <= 0) return;
 
-                workshop.TotalResults = total;
+				workshop.TotalResults = total;
+				if (_config.DefaultSkinsCountPerItem > 0)
+				{
+					if (total > _config.DefaultSkinsCountPerItem)
+					{
+						workshop.TotalResults = _config.DefaultSkinsCountPerItem;
+					}
+				}                
             
                 Regex regex = new Regex("<div class=\\\"workshopItem\\\">.*?</script>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
